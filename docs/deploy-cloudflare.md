@@ -8,7 +8,7 @@ Cloudflare 版使用 Pages 托管原 Vite 前端，Pages Functions 从 D1 读取
 
 ## 部署
 
-1. 克隆本 Fork 的 `codex/pages-d1` 分支，安装 Node.js 和 pnpm。运行 `pnpm install --frozen-lockfile` 和 `pnpm build`。
+1. 克隆本 Fork，安装 Node.js 和 pnpm。运行 `pnpm install --frozen-lockfile` 和 `pnpm build --mode cloudflare`。
 2. 用 `npx wrangler login` 登录 Cloudflare。运行 `npx wrangler d1 create freebie-radar-d1 --no-update-config`，把生成的数据库 ID 填入两个 Wrangler 配置。两个配置必须指向同一数据库。
 3. 运行 `npx wrangler d1 migrations apply DB --remote --config wrangler.cron.toml`。
 4. 创建 Pages 项目并部署。首次自建项目请把项目名改为你自己的名称，并同步修改 `wrangler.toml`。

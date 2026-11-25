@@ -16,8 +16,10 @@ export type FeedState = {
   unreadOnly: boolean;
 };
 
+const buildMode = (import.meta as ImportMeta & { env?: { MODE: string } }).env?.MODE;
+
 export const DEFAULT_FEED_STATE: FeedState = {
-  preset: "verified", search: "", source: "", categories: [], lang: "all", sort: "newest",
+  preset: buildMode === "cloudflare" ? "all" : "verified", search: "", source: "", categories: [], lang: "all", sort: "newest",
   range: "auto", priceCap: "auto", minScore: "all", obtain: "auto", kindFilter: "auto", unreadOnly: false,
 };
 const PRESETS = new Set(["verified", "offline", "pan", "deal", "opensource", "news", "info", "codes", "urgent", "starred", "hidden", "review", "all"]);
@@ -28,7 +30,7 @@ const pick = (value: string | null, allowed: readonly string[], fallback: string
 /** Interface language (`lang`) is intentionally distinct from title language (`filterLang`). */
 export function readFeedState(search: string): FeedState {
   const p = new URLSearchParams(search);
-  const preset = pick(p.get("preset"), [...PRESETS], "verified");
+  const preset = pick(p.get("preset"), [...PRESETS], DEFAULT_FEED_STATE.preset);
   const allowed = new Set(categoriesForPreset(preset));
   const kind = p.get("kind"), obtain = p.get("obtain");
   return {
