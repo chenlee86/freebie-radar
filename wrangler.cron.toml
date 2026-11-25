@@ -5,6 +5,9 @@ compatibility_flags = ["nodejs_compat"]
 workers_dev = false
 preview_urls = false
 
+[ai]
+binding = "AI"
+
 [triggers]
 crons = ["15 * * * *"]
 

@@ -1,0 +1,2 @@
+ALTER TABLE items ADD COLUMN title_zh TEXT;
+ALTER TABLE items ADD COLUMN summary_zh TEXT;

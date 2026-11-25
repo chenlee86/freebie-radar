@@ -17,8 +17,11 @@ import {
 import { KIND_LABEL, OBTAIN_HINT, OBTAIN_LABEL, categoryLabelForKind, expiresLabel, extractBlockCandidates, timeAgo } from "../lib/sources.ts";
 import type { Item } from "../types.ts";
 import { ItemClassificationEditor, type ClassificationPatch } from "./ItemClassificationEditor.tsx";
-import { t } from "../lib/i18n.ts";
+import { getLang, t } from "../lib/i18n.ts";
 import { useNow } from "../lib/clock.ts";
+
+const displayTitle = (item: Item) => getLang() === "zh" ? item.title_zh || item.title : item.title;
+const displaySummary = (item: Item) => getLang() === "zh" ? item.summary_zh || item.summary : item.summary;
 
 /** 相对时间：订阅共享时钟，只有这一小块每 30 秒重渲染。 */
 export function RelativeTime({ iso, className = "" }: { iso: string | null | undefined; className?: string }) {
@@ -245,7 +248,7 @@ export function CompactRow({
               (aiRejected ? "line-through decoration-ink-300 text-ink-500" : "")
             }
           >
-            {item.title}
+            {displayTitle(item)}
           </button>
           <span className="flex flex-wrap items-center gap-1 sm:contents">
             <KindBadge kind={item.kind} category={item.category} inline />
@@ -482,11 +485,11 @@ export function ItemCard({
             (aiRejected ? "line-through decoration-ink-300 text-ink-500" : "")
           }
         >
-          {item.title}
+          {displayTitle(item)}
         </h3>
 
-        {item.summary && (
-          <p className="mt-1.5 line-clamp-2 text-[13px] leading-relaxed text-ink-600">{item.summary}</p>
+        {displaySummary(item) && (
+          <p className="mt-1.5 line-clamp-2 text-[13px] leading-relaxed text-ink-600">{displaySummary(item)}</p>
         )}
 
         {(matched.length > 0 || codes.length > 0 || item.ai?.reason || (item.dupCount ?? 1) > 1) && (
@@ -745,7 +748,14 @@ export function ItemDetailDrawer({
             )}
           </div>
 
-          <h2 className="text-[17px] leading-snug font-semibold text-ink-950">{item.title}</h2>
+          <h2 className="text-[17px] leading-snug font-semibold text-ink-950">{displayTitle(item)}</h2>
+          {getLang() === "zh" && item.title_zh && (
+            <details className="text-[13px] text-ink-600">
+              <summary className="cursor-pointer">{t("查看原文详情")}</summary>
+              <p className="mt-2 font-medium">{item.title}</p>
+              {item.summary_zh && item.summary && <p className="mt-1 whitespace-pre-wrap">{item.summary}</p>}
+            </details>
+          )}
           {onClassificationSave && item.manualClassification !== undefined && !loading && !error && <ItemClassificationEditor key={item.id} item={item} onSave={onClassificationSave} />}
 
           {item.ai?.reason && (
@@ -787,10 +797,10 @@ export function ItemDetailDrawer({
             </div>
           )}
 
-          {item.summary && (
+          {displaySummary(item) && (
             <div>
               <div className="mb-1 text-[12px] font-medium text-ink-500">{t("摘要")}</div>
-              <p className="text-[13px] leading-relaxed whitespace-pre-wrap text-ink-700">{item.summary}</p>
+              <p className="text-[13px] leading-relaxed whitespace-pre-wrap text-ink-700">{displaySummary(item)}</p>
             </div>
           )}
 

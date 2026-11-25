@@ -1,6 +1,7 @@
 import { rssCollector } from "../src/server/collectors/rss.ts";
 import { normalizeUrl } from "../src/server/enrich/normalize.ts";
 import type { HttpClient } from "../src/server/http.ts";
+import { readTranslation, saveTranslation, translationCandidates, translationInput, translationModel, type TranslationItem } from "./translation.ts";
 
 const feeds = [
   { id: "rss-vpsgo", name: "VPSGO · 主机促销", url: "https://www.vpsgo.com/feed", kind: "deal", category: "vps" },
@@ -60,9 +61,24 @@ async function digest(db: D1Database, date: Date) {
 }
 
 export default {
-  async scheduled(event: ScheduledController, env: { DB: D1Database }) {
+  async scheduled(event: ScheduledController, env: { DB: D1Database; AI: { run(model: string, input: unknown): Promise<unknown> } }) {
     const date = new Date(event.scheduledTime);
     if (date.getUTCHours() === 0) await digest(env.DB, date);
-    await collect(env.DB, date);
+    try {
+      await collect(env.DB, date);
+    } finally {
+      const { results } = await env.DB.prepare(translationCandidates).bind(4).all<TranslationItem>();
+      for (const item of results) {
+        try {
+          const translated = readTranslation(await env.AI.run(translationModel, translationInput(item)));
+          if (translated) {
+            await env.DB.prepare(saveTranslation).bind(translated.title, item.summary ? translated.summary : null, item.id, item.title, item.summary).run();
+          }
+        } catch {
+          console.warn("RSS translation unavailable, retaining original text");
+          break;
+        }
+      }
+    }
   },
 };

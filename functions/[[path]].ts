@@ -50,8 +50,8 @@ app.get("/api/items", async (c) => {
   }
   const q = (query.search ?? query.q)?.trim().slice(0, 100);
   if (q) {
-    where.push("(instr(lower(title),lower(?)) > 0 OR instr(lower(coalesce(summary,'')),lower(?)) > 0)");
-    params.push(q, q);
+    where.push("instr(lower(title || ' ' || coalesce(summary,'') || ' ' || coalesce(title_zh,'') || ' ' || coalesce(summary_zh,'')),lower(?)) > 0");
+    params.push(q);
   }
   const ids = query.ids?.split(",").filter((id) => /^\d+$/.test(id)).slice(0, 30);
   if (ids?.length) {

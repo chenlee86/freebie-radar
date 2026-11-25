@@ -5,6 +5,8 @@ export type Item = {
   url: string;
   title: string;
   summary: string | null;
+  title_zh?: string | null;
+  summary_zh?: string | null;
   author: string | null;
   category: string | null;
   kind?: string | null;
