@@ -1,0 +1,2 @@
+ALTER TABLE push_log ADD COLUMN reason TEXT;
+  ALTER TABLE digests ADD COLUMN kind TEXT NOT NULL DEFAULT 'daily';

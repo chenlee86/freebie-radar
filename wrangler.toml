@@ -1,0 +1,9 @@
+name = "freebie-radar-cn"
+compatibility_date = "2026-11-25"
+pages_build_output_dir = "dist/web"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "freebie-radar-d1"
+database_id = "7f1cc306-e340-4333-bc8f-99f9e6b57d54"
+migrations_dir = "cloudflare/migrations"

@@ -1,3 +1,5 @@
+> **Cloudflare 部署预览版** · 本 Fork 由 [chenlee86](https://github.com/chenlee86) 基于 [ZiChuanLan/freebie-radar](https://github.com/ZiChuanLan/freebie-radar) 修改，保留原项目 MIT 许可证与作者署名。新增 Pages + D1 + Cron Worker 部署路径。 [在线预览](https://freebie-radar-cn.pages.dev/) · [Cloudflare 部署说明](docs/deploy-cloudflare.md)
+
 <div align="center">
   <img src="docs/logo.svg" alt="Resource Radar Logo" width="88" height="88" />
   <h1>资源雷达 · Resource Radar</h1>

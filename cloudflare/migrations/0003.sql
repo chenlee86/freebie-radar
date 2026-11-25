@@ -1,0 +1,5 @@
+ALTER TABLE sources ADD COLUMN interval_sec INTEGER NOT NULL DEFAULT 10800;
+  ALTER TABLE items ADD COLUMN content TEXT;
+  ALTER TABLE items ADD COLUMN codes TEXT NOT NULL DEFAULT '[]';
+  ALTER TABLE items ADD COLUMN pushed_at TEXT;
+  CREATE INDEX IF NOT EXISTS idx_items_codes ON items(codes);

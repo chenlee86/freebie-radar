@@ -9,6 +9,7 @@ logs/
 *.log
 .DS_Store
 .impeccable/
+.wrangler/
 
 # 一次性探针产物
 docs/dom.html
