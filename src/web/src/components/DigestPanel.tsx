@@ -108,7 +108,9 @@ export function DigestPanel({
           <Sparkles size={26} className="text-ink-400" />
           <div className="text-[14px] font-medium text-ink-900">{t("还没有日报记录")}</div>
           <p className="max-w-md text-[13px] leading-relaxed text-ink-500">
-            {t("点右上角「立即生成今日精选」，会按照你在「推送规则」里设好的价格、分类与 AI 条件生成今日精选并自动记录。")}
+            {canAdmin
+              ? t("点右上角「立即生成今日精选」，会按照你在「推送规则」里设好的价格、分类与 AI 条件生成今日精选并自动记录。")
+              : t("日报生成后会显示在这里。")}
           </p>
         </div>
       )}

@@ -774,7 +774,7 @@ export function App() {
       label: entry.key === "rules" ? effectiveScope === "personal" ? t("我的订阅与屏蔽") : t("全站订阅与屏蔽")
         : entry.key === "push" ? effectiveScope === "personal" ? t("我的推送规则") : t("全站推送规则") : entry.label,
       badge: entry.key === "rules" ? blockRules.data?.rules.length : entry.key === "push" ? push.data?.stats.queued : undefined,
-    })) : [{ key: "admin" as const, label: t("管理区"), icon: Lock }]),
+    })) : adminEntryAllowed ? [{ key: "admin" as const, label: t("管理区"), icon: Lock }] : []),
   ];
   const navigationGroup = (key: Tab) => key === "me" || ((key === "rules" || key === "push") && effectiveScope === "personal") ? t("个人空间") : t("站点管理");
 

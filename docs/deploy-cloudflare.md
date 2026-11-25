@@ -2,7 +2,7 @@
 
 本 Fork 由 chenlee86 基于 [ZiChuanLan/freebie-radar](https://github.com/ZiChuanLan/freebie-radar) 修改，沿用原项目 MIT 许可证。原 Docker Compose 路径仍适用于完整功能。
 
-Cloudflare 版使用 Pages 托管原 Vite 前端，Pages Functions 从 D1 读取资源列表、详情、来源及日报。独立 Cron Worker 写入同一个 D1，不开放 HTTP 入口。
+Cloudflare 版使用 Pages 托管原 Vite 前端，Pages Functions 从 D1 读取资源列表、详情、来源、今日热点及日报。热点单次最多统计 200 条候选。独立 Cron Worker 写入同一个 D1，不开放 HTTP 入口。
 
 预览版每小时第 15 分钟轮询一个 RSS 源，默认包括 VPSGO、IndieGameBundles 和 IsThereAnyDeal，每源每三小时最多写入 15 条候选。同一个 Cron Trigger 在 UTC 00:15 同时生成日报。来源分类依据预设源类型，未经过原版 AI 验真。请从「全部白嫖」或「好价」浏览结果。原版登录、管理、其他采集源、Telegram 推送、AI 审核和依赖系统 curl 或 FlareSolverr 的源尚未移植。
 

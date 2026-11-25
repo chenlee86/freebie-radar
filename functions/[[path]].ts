@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { applyChannelQuery } from "../src/shared/channel-query.ts";
+import { hotHours, hotRowsSql, reportFromRows, type HotRow } from "../src/server/hot-report.ts";
 
 type Bindings = { DB: D1Database };
 const app = new Hono<{ Bindings: Bindings }>();
@@ -95,6 +96,13 @@ app.get("/api/stats", async (c) => {
     totals: { total, active: total, unread: total, cleanFree: 0,
       starred: 0, expired: 0, withCodes: 0, last24h: 0, blockRules: 0, aiKept: 0, aiRejected: 0 },
     features: { ai: false, push: false, pushChannel: "none" } });
+});
+app.get("/api/hot", async (c) => {
+  const hours = hotHours(Number(c.req.query("hours") || 24));
+  const now = new Date();
+  const since = new Date(now.getTime() - 2 * hours * 3_600_000).toISOString();
+  const { results } = await c.env.DB.prepare(hotRowsSql + " LIMIT 200").bind(since).all<HotRow>();
+  return c.json(reportFromRows(results, hours, now, c.req.query("scope")));
 });
 app.get("/api/digests", async (c) => {
   const { results } = await c.env.DB.prepare("SELECT date,json_array_length(item_ids) AS count,created_at,pushed_at,kind FROM digests ORDER BY date DESC LIMIT 30").all();
